@@ -25,6 +25,7 @@ void loop(void)
     if (btnState == HIGH) {
         digitalWrite(GREEN_LED_PIN, HIGH);
         Serial.println("GREEN=1");
+        
     } else {
         digitalWrite(GREEN_LED_PIN, LOW);
     }
