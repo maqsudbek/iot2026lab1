@@ -7,6 +7,8 @@
 
 #define BTN_PIN 25
 
+bool prevBtnState = LOW;
+
 /****************************************************/
 void setup(void) 
 {
@@ -22,11 +24,14 @@ void loop(void)
 {
     bool btnState = digitalRead(BTN_PIN);
     
-    if (btnState == HIGH) {
+    if (btnState == HIGH && prevBtnState == LOW) {
         digitalWrite(GREEN_LED_PIN, HIGH);
         Serial.println("GREEN=1");
         
-    } else {
+    } else if (btnState == LOW && prevBtnState == HIGH) {
         digitalWrite(GREEN_LED_PIN, LOW);
+        Serial.println("GREEN=0");
     }
+
+    prevBtnState = btnState;
 }

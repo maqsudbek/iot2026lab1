@@ -9,12 +9,16 @@
 void setup(void) 
 {
     pinMode(RED_LED_PIN, OUTPUT); // RED LED
+
+    Serial.begin(115200);
+
 }
 
 
 /****************************************************/
 void loop(void) 
 {
+
     digitalWrite(RED_LED_PIN, HIGH); // Turn RED ON
     Serial.println("RED ON");
     delay(1000); // Wait for 1000 ms
