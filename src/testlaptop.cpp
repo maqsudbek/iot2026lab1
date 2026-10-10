@@ -6,18 +6,20 @@
 
 // GLOBAL DECLARATIONS
 
+#define LENOVO_PWR_PIN 12
+
 // WiFi credentials
-const char* ssid = "Wokwi-GUEST";
-const char* password = "";
+const char* ssid = "#Turin.uz";
+const char* password = "Turin_2024@!";
 
 // MQTT Broker settings
-const char* mqtt_broker = "<test.mosquitto.org>";  // Free public MQTT broker
+const char* mqtt_broker = "mqtt.iotserver.uz";  // Free public MQTT broker
 const int mqtt_port = 1883;
-const char* mqtt_username = "<username>";  // username given in the telegram group
-const char* mqtt_password = "<password>";  // password given in the telegram group
+const char* mqtt_username = "lenovo";  // username given in the telegram group
+const char* mqtt_password = "lenovopc";  // password given in the telegram group
 
-const char* mqtt_topic_pub = "ttpu/iot/test/out";   // Topic to publish
-const char* mqtt_topic_sub = "ttpu/iot/test/in";    // Topic to subscribe
+const char* mqtt_topic_pub = "lenovo/esp32/publish";   // Topic to publish
+const char* mqtt_topic_sub = "lenovo/esp32/pwr";    // Topic to subscribe
 
 
 WiFiClient espClient;
@@ -38,21 +40,24 @@ void connectMQTT();
  * SETUP
  */
 void setup() {
-  Serial.begin(115200);
-  delay(1000);
-  
-  Serial.println("\n===== MQTT Basic Example =====");
-  Serial.println("Your Name, Lab 3 - MQTT Basic");
-  
-  // Connect to WiFi
-  connectWiFi();
-  
-  // Setup MQTT
-  mqtt_client.setServer(mqtt_broker, mqtt_port);
-  mqtt_client.setCallback(mqttCallback);
-  
-  // Connect to MQTT broker
-  connectMQTT();
+
+    pinMode(LENOVO_PWR_PIN, OUTPUT);
+    digitalWrite(LENOVO_PWR_PIN, HIGH);  // Set the pin HIGH initially
+
+    Serial.begin(115200);
+    delay(1000);
+
+    Serial.println("\n===== ESP32 - LENOVO CONNECTED =====");
+
+    // Connect to WiFi
+    connectWiFi();
+
+    // Setup MQTT
+    mqtt_client.setServer(mqtt_broker, mqtt_port);
+    mqtt_client.setCallback(mqttCallback);
+
+    // Connect to MQTT broker
+    connectMQTT();
 }
 
 
@@ -128,6 +133,16 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
   Serial.print("Message content: ");
   Serial.println(message);
   Serial.println("---");
+
+  // IF msg is "ON" then turn on the laptop power button
+  if (message == "ON") {
+    Serial.println("Turning ON the laptop power button...");
+    digitalWrite(LENOVO_PWR_PIN, LOW);  // Simulate button press
+    delay(1000);  // Hold the button for 1 second
+    digitalWrite(LENOVO_PWR_PIN, HIGH);  // Release the button
+    Serial.println("Laptop power button pressed!");
+  }
+
 }
 
 // Function to connect/reconnect to MQTT broker
