@@ -64,3 +64,5 @@ You need to finish following 6 exercises
   - `'b'` → turn **BLUE (D14)** OFF  
 - Serial: Print `BLUE=1` or `BLUE=0` after each command.
 
+  *****
+
